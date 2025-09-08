@@ -1,0 +1,43 @@
+{
+  "screenSize": {
+    "width": {
+      "value": 1152,
+      "type": "number",
+      "description": "屏幕宽度"
+    },
+    "height": {
+      "value": 768,
+      "type": "number",
+      "description": "屏幕高度"
+    }
+  },
+  "debugConfig": {
+    "debug": {
+      "value": false,
+      "type": "boolean",
+      "description": "开启调试模式"
+    },
+    "debugShowBody": {
+      "value": false,
+      "type": "boolean",
+      "description": "显示碰撞体"
+    },
+    "debugShowStaticBody": {
+      "value": false,
+      "type": "boolean",
+      "description": "显示静态碰撞体"
+    },
+    "debugShowVelocity": {
+      "value": false,
+      "type": "boolean",
+      "description": "显示速度向量"
+    }
+  },
+  "renderConfig": {
+    "pixelArt": {
+      "value": true,
+      "type": "boolean",
+      "description": "是否启用像素艺术渲染"
+    }
+  }
+}
