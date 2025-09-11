@@ -1,6 +1,11 @@
-import Phaser from "phaser"
-import GameScene from "./scenes/GameScene"
-import { screenSize, debugConfig, renderConfig } from "./gameConfig.json"
+import Phaser from "phaser";
+import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
+import { screenSize, debugConfig, renderConfig } from "./gameConfig.json";
+import { Preloader } from "./scenes/Preloader";
+import { TitleScreen } from "./scenes/TitleScreen";
+import { VictoryUIScene } from "./scenes/VictoryUIScene";
+import { GameCompleteUIScene } from "./scenes/GameCompleteUIScene";
+import { GameOverUIScene } from "./scenes/GameOverUIScene";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -15,13 +20,35 @@ const config: Phaser.Types.Core.GameConfig = {
     arcade: {
       fps: 120,
       debug: debugConfig.debug.value,
-      debugShowBody: debugConfig.debugShowBody.value,
-      debugShowStaticBody: debugConfig.debugShowStaticBody.value,
-      debugShowVelocity: debugConfig.debugShowVelocity.value,
+      debugShowBody: debugConfig.debug.value,
+      debugShowStaticBody: debugConfig.debug.value,
+      debugShowVelocity: debugConfig.debug.value,
     },
   },
   pixelArt: renderConfig.pixelArt.value,
-  scene: [GameScene],
-}
+  plugins: {
+    scene: [{
+      key: 'rexUI',
+      plugin: RexUIPlugin,
+      mapping: 'rexUI'
+    }]
+  },
+};
 
-export default new Phaser.Game(config)
+const game = new Phaser.Game(config);
+// Strictly add scenes in the following order: Preloader, TitleScreen, level scenes, UI-related scenes
+
+// Preloader: Load all game resources
+game.scene.add("Preloader", Preloader, true);
+
+// TitleScreen
+game.scene.add("TitleScreen", TitleScreen);
+
+// Level scenes
+// game.scene.add("Level1Scene", Level1Scene);
+// game.scene.add("Level2Scene", Level2Scene);
+
+// UI-related scenes
+game.scene.add("VictoryUIScene", VictoryUIScene);
+game.scene.add("GameCompleteUIScene", GameCompleteUIScene);
+game.scene.add("GameOverUIScene", GameOverUIScene);

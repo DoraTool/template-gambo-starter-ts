@@ -1,0 +1,50 @@
+{
+  "fonts": {
+    "files": [
+      {
+        "url": "assets/fronts/retro-pixel-arcade.otf.woff2",
+        "type": "font",
+        "key": "RetroPixel",
+        "fontType": "opentype"
+      },
+      {
+        "url": "assets/fronts/supercell-magic_0.ttf",
+        "type": "font",
+        "key": "SupercellMagic",
+        "fontType": "opentype"
+      }
+    ]
+  },
+  "backgrounds": {
+    "files": [
+      {
+        "type": "image",
+        "key": "space_background",
+        "url": "https://specai-game-assets.s3.us-west-1.amazonaws.com/261/images/f1d2ae3c-cc48-4c40-b05c-4a141394a145.png"
+      }
+    ]
+  },
+  "ui_images": {
+    "files": [
+      {
+        "type": "image",
+        "key": "game_title",
+        "url": "https://specai-game-assets.s3.us-west-1.amazonaws.com/261/images/game_title.png"
+      }
+    ]
+  },
+  "musics": {
+    "files": [
+      {
+        "type": "audio",
+        "key": "space_battle_8bit_theme",
+        "url": "https://specai-game-assets.s3.us-west-1.amazonaws.com/261/music/space_battle_8bit_theme.wav"
+      }
+    ]
+  },
+  "meta": {
+    "app": "Gambo AI",
+    "version": 1,
+    "showAllFilesInBlocks": false
+  }
+}
