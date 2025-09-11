@@ -123,7 +123,7 @@ export class GameOverUIScene extends Phaser.Scene {
     const screenWidth = screenSize.width.value;
     
     // Create failure text
-    this.failureText = this.add.text(0, 0, 'Your gundam has been destroyed!', {
+    this.failureText = this.add.text(0, 0, 'Cuphead has been defeated!', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 25, 36) + 'px',
       color: '#FFFFFF',

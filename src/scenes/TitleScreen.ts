@@ -43,7 +43,7 @@ export class TitleScreen extends Phaser.Scene {
     const screenHeight = screenSize.height.value;
 
     // Create background and scale to fill screen
-    this.background = this.add.image(screenWidth / 2, screenHeight / 2, "space_background");
+    this.background = this.add.image(screenWidth / 2, screenHeight / 2, "kitchen_background");
     
     // Calculate scale ratio to fill screen
     const scaleX = screenWidth / this.background.width;
@@ -90,7 +90,7 @@ export class TitleScreen extends Phaser.Scene {
     const screenHeight = screenSize.height.value;
     
     // Create game title image
-    this.gameTitle = this.add.image(0, 0, "game_title");
+    this.gameTitle = this.add.image(0, 0, "cuphead_kitchen_title");
     
     const maxTitleWidth = screenWidth * 0.7;
     const maxTitleHeight = screenHeight * 0.6;
@@ -156,7 +156,7 @@ export class TitleScreen extends Phaser.Scene {
 
   private playBackgroundMusic(): void {
     // Play background music (lower volume)
-    this.backgroundMusic = this.sound.add("space_battle_8bit_theme", {
+    this.backgroundMusic = this.sound.add("kitchen_adventure_theme", {
       volume: 0.4,
       loop: true
     });

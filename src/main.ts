@@ -6,6 +6,8 @@ import { TitleScreen } from "./scenes/TitleScreen";
 import { VictoryUIScene } from "./scenes/VictoryUIScene";
 import { GameCompleteUIScene } from "./scenes/GameCompleteUIScene";
 import { GameOverUIScene } from "./scenes/GameOverUIScene";
+import { KitchenLevel1Scene } from "./KitchenLevel1Scene";
+import { UIScene } from "./UIScene";
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -45,10 +47,10 @@ game.scene.add("Preloader", Preloader, true);
 game.scene.add("TitleScreen", TitleScreen);
 
 // Level scenes
-// game.scene.add("Level1Scene", Level1Scene);
-// game.scene.add("Level2Scene", Level2Scene);
+game.scene.add("KitchenLevel1Scene", KitchenLevel1Scene);
 
 // UI-related scenes
+game.scene.add("UIScene", UIScene);
 game.scene.add("VictoryUIScene", VictoryUIScene);
 game.scene.add("GameCompleteUIScene", GameCompleteUIScene);
 game.scene.add("GameOverUIScene", GameOverUIScene);

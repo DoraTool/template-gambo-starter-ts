@@ -4,8 +4,7 @@
 export class LevelManager {
   // Level order list
   static readonly LEVEL_ORDER: string[] = [
-    "Level1Scene",
-    "Level2Scene"
+    "KitchenLevel1Scene"
   ];
 
   // Get the key of the next level scene

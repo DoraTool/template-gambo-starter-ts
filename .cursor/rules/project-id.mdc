@@ -1,0 +1,6 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+project_id: "ts-new-2"

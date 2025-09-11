@@ -19,8 +19,8 @@
     "files": [
       {
         "type": "image",
-        "key": "space_background",
-        "url": "https://specai-game-assets.s3.us-west-1.amazonaws.com/261/images/f1d2ae3c-cc48-4c40-b05c-4a141394a145.png"
+        "key": "kitchen_background",
+        "url": "https://cdn-game-mcp-test.gambo.ai/cb62032b-414e-447a-9b16-e5374a017b8c/images/kitchen_background.png"
       }
     ]
   },
@@ -28,8 +28,133 @@
     "files": [
       {
         "type": "image",
-        "key": "game_title",
-        "url": "https://specai-game-assets.s3.us-west-1.amazonaws.com/261/images/game_title.png"
+        "key": "cuphead_kitchen_title",
+        "url": "https://cdn-game-mcp-test.gambo.ai/0d80f894-2ff9-41b4-84cb-109524379286/images/cuphead_kitchen_title.png"
+      }
+    ]
+  },
+  "player_animations": {
+    "files": [
+      {
+        "type": "image",
+        "key": "cuphead_idle_frame1",
+        "url": "https://cdn-game-mcp-test.gambo.ai/7fcfcc41-0ccb-4e3f-a987-e5b551bf6bf9/animations/cuphead_idle_R/frame_1.png"
+      },
+      {
+        "type": "image",
+        "key": "cuphead_idle_frame2",
+        "url": "https://cdn-game-mcp-test.gambo.ai/23566e20-57fb-4127-a6ae-4bfbe84df8b3/animations/cuphead_idle_R/frame_2.png"
+      },
+      {
+        "type": "image",
+        "key": "cuphead_walk_frame1",
+        "url": "https://cdn-game-mcp-test.gambo.ai/82824bfb-7b48-495a-8b2e-196b52abc1ff/animations/cuphead_walk_R/frame_1.png"
+      },
+      {
+        "type": "image",
+        "key": "cuphead_walk_frame2",
+        "url": "https://cdn-game-mcp-test.gambo.ai/a7895e20-3f2e-48d6-9ada-da99062ea544/animations/cuphead_walk_R/frame_2.png"
+      },
+      {
+        "type": "image",
+        "key": "cuphead_jump_frame1",
+        "url": "https://cdn-game-mcp-test.gambo.ai/fc59f362-3143-40ec-8c08-125e78b3e5b7/animations/cuphead_jump_R/frame_1.png"
+      },
+      {
+        "type": "image",
+        "key": "cuphead_jump_frame2",
+        "url": "https://cdn-game-mcp-test.gambo.ai/5318aea9-9d64-4ff5-ae5e-a31e4538b32f/animations/cuphead_jump_R/frame_2.png"
+      },
+      {
+        "type": "image",
+        "key": "cuphead_attack_frame1",
+        "url": "https://cdn-game-mcp-test.gambo.ai/f9b290d1-e2cd-4c91-877d-19aa669290ad/animations/cuphead_attack_R/frame_1.png"
+      },
+      {
+        "type": "image",
+        "key": "cuphead_attack_frame2",
+        "url": "https://cdn-game-mcp-test.gambo.ai/1d97a4e7-a481-4beb-9cdb-7067dfd7a6a3/animations/cuphead_attack_R/frame_2.png"
+      },
+      {
+        "type": "image",
+        "key": "cuphead_die_frame1",
+        "url": "https://cdn-game-mcp-test.gambo.ai/14d793cf-1b25-4ca6-b9f9-5175a54528db/animations/cuphead_die_R/frame_1.png"
+      },
+      {
+        "type": "image",
+        "key": "cuphead_die_frame2",
+        "url": "https://cdn-game-mcp-test.gambo.ai/d320b544-c783-460f-b844-f007a514156b/animations/cuphead_die_R/frame_2.png"
+      }
+    ]
+  },
+  "enemies": {
+    "files": [
+      {
+        "type": "image",
+        "key": "salt_shaker_enemy",
+        "url": "https://cdn-game-mcp-test.gambo.ai/66ea6697-1d4a-4848-b8de-ff674fb78f03/images/salt_shaker_enemy.png"
+      }
+    ]
+  },
+  "decorations": {
+    "files": [
+      {
+        "type": "image",
+        "key": "kitchen_pot_variant_1",
+        "url": "https://cdn-game-mcp-test.gambo.ai/914e657a-ce41-4bf5-a4c4-ea3164520ae4/images/kitchen_pot_variants/variant_1.png"
+      },
+      {
+        "type": "image",
+        "key": "kitchen_pot_variant_2",
+        "url": "https://cdn-game-mcp-test.gambo.ai/5924418b-5c0a-4913-9920-164680218674/images/kitchen_pot_variants/variant_2.png"
+      },
+      {
+        "type": "image",
+        "key": "kitchen_utensil_variant_1",
+        "url": "https://cdn-game-mcp-test.gambo.ai/5060e207-205a-4fe2-a85c-27dacce84704/images/kitchen_utensil_variants/variant_1.png"
+      },
+      {
+        "type": "image",
+        "key": "kitchen_utensil_variant_2",
+        "url": "https://cdn-game-mcp-test.gambo.ai/bf6aa04d-df61-417b-954d-30ac8ecb2784/images/kitchen_utensil_variants/variant_2.png"
+      },
+      {
+        "type": "image",
+        "key": "kitchen_bottle_variant_1",
+        "url": "https://cdn-game-mcp-test.gambo.ai/e480a8d5-522c-46aa-8510-982b6b020d22/images/kitchen_bottle_variants/variant_1.png"
+      },
+      {
+        "type": "image",
+        "key": "kitchen_bottle_variant_2",
+        "url": "https://cdn-game-mcp-test.gambo.ai/86544324-7066-4635-970a-388256ac6223/images/kitchen_bottle_variants/variant_2.png"
+      },
+      {
+        "type": "image",
+        "key": "kitchen_food_variant_1",
+        "url": "https://cdn-game-mcp-test.gambo.ai/c9144f6f-4be7-45bc-a02a-47564da58b33/images/kitchen_food_variants/variant_1.png"
+      },
+      {
+        "type": "image",
+        "key": "kitchen_food_variant_2",
+        "url": "https://cdn-game-mcp-test.gambo.ai/1c685491-ec61-451a-add5-b911c79b5365/images/kitchen_food_variants/variant_2.png"
+      }
+    ]
+  },
+  "tilesets": {
+    "files": [
+      {
+        "type": "image",
+        "key": "kitchen_floor_tileset",
+        "url": "https://cdn-game-mcp-test.gambo.ai/5fc08069-e577-4ff4-915c-e3147c2bbf08/tilesets/kitchen_floor_tileset.png"
+      }
+    ]
+  },
+  "tilemaps": {
+    "files": [
+      {
+        "type": "tilemapTiledJSON",
+        "key": "kitchen_level1_map",
+        "url": "https://cdn-game-mcp-test.gambo.ai/be8b0709-f13f-403a-843e-1e5fb206f49c/tile_maps/kitchen_level1_map.json"
       }
     ]
   },
@@ -37,8 +162,42 @@
     "files": [
       {
         "type": "audio",
-        "key": "space_battle_8bit_theme",
-        "url": "https://specai-game-assets.s3.us-west-1.amazonaws.com/261/music/space_battle_8bit_theme.wav"
+        "key": "kitchen_adventure_theme",
+        "url": "https://cdn-game-mcp-test.gambo.ai/873eb578-6fd5-4555-b333-57520eff62a5/music/kitchen_adventure_theme.wav"
+      }
+    ]
+  },
+  "sound_effects": {
+    "files": [
+      {
+        "type": "audio",
+        "key": "game_over_sound",
+        "url": "https://cdn-game-mcp-test.gambo.ai/15da6ac5-4ae1-48d5-8435-ff3b970a4177/sound_effects/game_over_sound.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "ui_click_sound",
+        "url": "https://cdn-game-mcp-test.gambo.ai/1c6b46cc-205f-4884-86e8-f004a731b9d1/sound_effects/ui_click_sound.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "cuphead_jump_sound",
+        "url": "https://cdn-game-mcp-test.gambo.ai/bcecd38c-2c36-4eca-b3af-cec5708ff90f/sound_effects/cuphead_jump_sound.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "cuphead_shoot_sound",
+        "url": "https://cdn-game-mcp-test.gambo.ai/05a10c88-afdb-4e37-919e-07b8007b5573/sound_effects/cuphead_shoot_sound.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "cuphead_hurt_sound",
+        "url": "https://cdn-game-mcp-test.gambo.ai/e61fa9b2-bb67-411b-9863-a9c88c99a835/sound_effects/cuphead_hurt_sound.mp3"
+      },
+      {
+        "type": "audio",
+        "key": "enemy_defeat_sound",
+        "url": "https://cdn-game-mcp-test.gambo.ai/bbef236c-8b40-4611-96eb-5c27c7b1fd7a/sound_effects/enemy_defeat_sound.mp3"
       }
     ]
   },
