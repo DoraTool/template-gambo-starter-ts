@@ -8,6 +8,10 @@ import {
 } from "../helpers/phaser";
 import GameScene from "../../scenes/GameScene";
 
+/// IMPORTANT: Be aware that tests run in a headless environment, so loading
+/// resources like fonts or images or audio is not possible. Write tests that
+/// don't rely on resources.
+
 let currentGame: Phaser.Game | null = null;
 
 afterEach(async () => {
@@ -22,8 +26,8 @@ describe("GameScene (HEADLESS)", () => {
     const { game, scene } = await bootScene(GameScene);
     currentGame = game;
 
-    // Tick frame until scene is active
-    await waitUntil(() => scene.scene?.isActive(), 10000);
+    // Wait 100 frames for the scene to be active
+    await waitUntil(() => scene.scene?.isActive(), 100);
 
     // Tick frame 5 times
     await tickFrames(5);
