@@ -8,4 +8,19 @@ export default defineConfig({
     hmr: false,
   },
   plugins: [],
+  resolve: {
+    alias: {
+      phaser: "phaser/dist/phaser.js",
+    },
+  },
+  test: {
+    environment: "jsdom",
+    setupFiles: ["src/test/setup.ts"],
+    include: ["src/test/**/*.{test,spec}.ts"],
+    testTimeout: 10000,
+    coverage: {
+      provider: "v8",
+      reporter: ["text", "html"],
+    },
+  },
 })
