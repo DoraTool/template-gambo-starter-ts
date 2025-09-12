@@ -43,7 +43,6 @@ export class UIScene extends Phaser.Scene {
 
     // Create health bar
     this.healthBar = this.add.graphics()
-    this.updateHealthBar(100) // Start with full health
 
     // Create health text
     this.healthText = this.add.text(0, 0, 'Health: 100%', {
@@ -65,6 +64,7 @@ export class UIScene extends Phaser.Scene {
 
     // Add health container to main UI container
     this.uiContainer.add(healthContainer, { expand: false })
+    this.updateHealthBar(100) // Start with full health
   }
 
   updateHealthBar(healthPercentage: number) {

@@ -26,13 +26,13 @@ export class CupheadPlayer extends Phaser.Physics.Arcade.Sprite {
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, "cuphead_idle_frame1")
+    this.scene = scene
 
     // Add to scene and physics system
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
     // Character properties
-    this.scene = scene
     this.facingDirection = "right"
     this.walkSpeed = playerConfig.walkSpeed.value
     this.jumpPower = playerConfig.jumpPower.value

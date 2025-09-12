@@ -115,13 +115,13 @@ export class SaltShakerEnemy extends Phaser.Physics.Arcade.Sprite {
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y, "salt_shaker_enemy")
+    this.scene = scene
 
     // Add to scene and physics system
     scene.add.existing(this)
     scene.physics.add.existing(this)
 
     // Character properties
-    this.scene = scene
     this.facingDirection = "left"
 
     // State flags

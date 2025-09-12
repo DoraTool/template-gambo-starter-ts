@@ -30,7 +30,6 @@ export abstract class BaseLevelScene extends Phaser.Scene {
     this.createBackground()
 
     // Create map
-    this.createTileMap()
 
     // Create decoration elements
     this.decorations = this.add.group()
@@ -45,6 +44,7 @@ export abstract class BaseLevelScene extends Phaser.Scene {
 
     // Set basic collisions
     this.setupBaseCollisions()
+    this.createTileMap()
 
     // Set player's world boundary collision
     this.player.body!.setCollideWorldBounds(true)
