@@ -15,6 +15,14 @@
       }
     ]
   },
+  "tilemaps": {
+    "files": [
+    ]
+  },
+  "tilesets": {
+    "files": [
+    ]
+  },
   "backgrounds": {
     "files": [
       {
@@ -33,7 +41,11 @@
       }
     ]
   },
-  "musics": {
+  "sound_effects": {
+    "files": [
+    ]
+  },
+  "background_musics": {
     "files": [
       {
         "type": "audio",
