@@ -8,7 +8,7 @@ export class Preloader extends Phaser.Scene {
 		// Load progress bar
 		this.setupLoadingProgressUI(this);
 		// Load asset pack by type
-		this.load.pack('assetPack', './assets/asset-pack.json');
+		this.load.pack('assetPack', 'assets/asset-pack.json');
 	}
 
 	create(): void {
