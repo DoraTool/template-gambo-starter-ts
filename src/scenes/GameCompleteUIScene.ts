@@ -9,7 +9,6 @@ export class GameCompleteUIScene extends Phaser.Scene {
   private currentLevelKey: string | null = null; // Store the current level scene key
   private isTransitioning: boolean = false; // Reset transition flag
   private overlay!: Phaser.GameObjects.Graphics;
-  private mainContainer!: any; // rexUI Sizer type
   private gameCompleteTitle!: Phaser.GameObjects.Text;
   private congratulationsText!: Phaser.GameObjects.Text;
   private pressEnterText!: Phaser.GameObjects.Text;
@@ -52,48 +51,22 @@ export class GameCompleteUIScene extends Phaser.Scene {
   }
 
   private createUI(): void {
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-
-    // Create vertical layout container using rexUI
-    this.mainContainer = this.rexUI.add.sizer({
-      x: screenWidth / 2,
-      y: screenHeight / 2,
-      width: screenWidth,
-      height: screenHeight,
-      orientation: 'vertical',
-      space: { 
-        top: 120,           // Top padding
-        bottom: 120,        // Bottom padding
-        left: 20,          // Left padding
-        right: 20          // Right padding
-      }
-    });
-
     // Create game complete title
     this.createGameCompleteTitle();
-
-    // Create flexible space in the middle
-    this.mainContainer.addSpace();
 
     // Create congratulations text
     this.createCongratulationsText();
 
-    // Add some space
-    this.mainContainer.addSpace();
-
     // Create PRESS ENTER text
     this.createPressEnterText();
-
-    // Layout UI
-    this.mainContainer.layout();
   }
 
   private createGameCompleteTitle(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
-    // Create game complete title text
-    this.gameCompleteTitle = this.add.text(0, 0, 'GAME COMPLETE!', {
+    // Create game complete title text positioned at upper third of screen
+    this.gameCompleteTitle = this.add.text(screenWidth / 2, screenHeight * 0.25, 'GAME COMPLETE!', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 13, 72) + 'px',
       color: '#FFD700', // Gold color
@@ -101,12 +74,6 @@ export class GameCompleteUIScene extends Phaser.Scene {
       strokeThickness: 8,
       align: 'center'
     }).setOrigin(0.5, 0.5);
-
-    // Add to main container
-    this.mainContainer.add(this.gameCompleteTitle, {
-        proportion: 0, 
-        align: 'center',
-    });
 
     // Add blinking animation for title
     this.tweens.add({
@@ -122,9 +89,10 @@ export class GameCompleteUIScene extends Phaser.Scene {
 
   private createCongratulationsText(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
-    // Create congratulations text
-    this.congratulationsText = this.add.text(0, 0, 'Congratulations!\nYou have completed all levels!', {
+    // Create congratulations text positioned at center of screen
+    this.congratulationsText = this.add.text(screenWidth / 2, screenHeight * 0.5, 'Congratulations!\nYou have completed all levels!', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 25, 36) + 'px',
       color: '#FFFFFF',
@@ -132,12 +100,6 @@ export class GameCompleteUIScene extends Phaser.Scene {
       strokeThickness: 4,
       align: 'center'
     }).setOrigin(0.5, 0.5);
-
-    // Add to main container
-    this.mainContainer.add(this.congratulationsText, {
-        proportion: 0, 
-        align: 'center',
-    });
 
     // Add rainbow color effect
     this.tweens.add({
@@ -154,11 +116,12 @@ export class GameCompleteUIScene extends Phaser.Scene {
 
   private createPressEnterText(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
     console.log('use font RetroPixel');
     
-    // Create PRESS ENTER text
-    this.pressEnterText = this.add.text(0, 0, 'PRESS ENTER TO RETURN TO MENU', {
+    // Create PRESS ENTER text positioned at lower third of screen
+    this.pressEnterText = this.add.text(screenWidth / 2, screenHeight * 0.75, 'PRESS ENTER TO RETURN TO MENU', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 28, 32) + 'px',
       color: '#00FF00', // Green color
@@ -166,12 +129,6 @@ export class GameCompleteUIScene extends Phaser.Scene {
       strokeThickness: 6,
       align: 'center'
     }).setOrigin(0.5, 0.5);
-
-    // Add to main container
-    this.mainContainer.add(this.pressEnterText, { 
-      proportion: 0, 
-      align: 'center',
-    });
 
     // Add blinking animation
     this.tweens.add({

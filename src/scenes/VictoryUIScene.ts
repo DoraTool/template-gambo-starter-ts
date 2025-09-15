@@ -9,7 +9,6 @@ interface VictoryUISceneData {
 export class VictoryUIScene extends Phaser.Scene {
   private currentLevelKey: string | null = null; // Store the current level scene key
   private overlay!: Phaser.GameObjects.Graphics;
-  private mainContainer!: any; // rexUI Sizer type
   private victoryTitle!: Phaser.GameObjects.Text;
   private subtitle!: Phaser.GameObjects.Text;
   private pressEnterText!: Phaser.GameObjects.Text;
@@ -50,48 +49,22 @@ export class VictoryUIScene extends Phaser.Scene {
   }
 
   private createUI(): void {
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-
-    // Create vertical layout container using rexUI
-    this.mainContainer = this.rexUI.add.sizer({
-      x: screenWidth / 2,
-      y: screenHeight / 2,
-      width: screenWidth,
-      height: screenHeight,
-      orientation: 'vertical',
-      space: { 
-        top: 150,           // Top padding
-        bottom: 150,        // Bottom padding
-        left: 20,          // Left padding
-        right: 20          // Right padding
-      }
-    });
-
     // Create victory title
     this.createVictoryTitle();
-
-    // Create flexible space in the middle
-    this.mainContainer.addSpace();
 
     // Create subtitle
     this.createSubtitle();
 
-    // Add some space
-    this.mainContainer.addSpace();
-
     // Create PRESS ENTER text
     this.createPressEnterText();
-
-    // Layout UI
-    this.mainContainer.layout();
   }
 
   private createVictoryTitle(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
-    // Create victory title text
-    this.victoryTitle = this.add.text(0, 0, 'LEVEL COMPLETE!', {
+    // Create victory title text positioned at upper third of screen
+    this.victoryTitle = this.add.text(screenWidth / 2, screenHeight * 0.3, 'LEVEL COMPLETE!', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 15, 64) + 'px',
       color: '#FFD700', // Gold color
@@ -99,12 +72,6 @@ export class VictoryUIScene extends Phaser.Scene {
       strokeThickness: 6,
       align: 'center'
     }).setOrigin(0.5, 0.5);
-
-    // Add to main container
-    this.mainContainer.add(this.victoryTitle, {
-        proportion: 0, 
-        align: 'center',
-    });
 
     // Add blinking animation for victory text
     this.tweens.add({
@@ -120,9 +87,10 @@ export class VictoryUIScene extends Phaser.Scene {
 
   private createSubtitle(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
-    // Create subtitle text
-    this.subtitle = this.add.text(0, 0, 'All enemies defeated!', {
+    // Create subtitle text positioned at center of screen
+    this.subtitle = this.add.text(screenWidth / 2, screenHeight * 0.5, 'All enemies defeated!', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 25, 36) + 'px',
       color: '#FFFFFF',
@@ -130,21 +98,16 @@ export class VictoryUIScene extends Phaser.Scene {
       strokeThickness: 4,
       align: 'center'
     }).setOrigin(0.5, 0.5);
-
-    // Add to main container
-    this.mainContainer.add(this.subtitle, {
-        proportion: 0, 
-        align: 'center',
-    });
   }
 
   private createPressEnterText(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
     console.log('use font RetroPixel');
     
-    // Create PRESS ENTER text
-    this.pressEnterText = this.add.text(0, 0, 'PRESS ENTER FOR NEXT LEVEL', {
+    // Create PRESS ENTER text positioned at lower third of screen
+    this.pressEnterText = this.add.text(screenWidth / 2, screenHeight * 0.7, 'PRESS ENTER FOR NEXT LEVEL', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 25, 36) + 'px',
       color: '#00FF00', // Green color
@@ -152,12 +115,6 @@ export class VictoryUIScene extends Phaser.Scene {
       strokeThickness: 6,
       align: 'center'
     }).setOrigin(0.5, 0.5);
-
-    // Add to main container
-    this.mainContainer.add(this.pressEnterText, { 
-      proportion: 0, 
-      align: 'center',
-    });
 
     // Add blinking animation
     this.tweens.add({

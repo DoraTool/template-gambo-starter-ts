@@ -9,7 +9,6 @@ export class GameOverUIScene extends Phaser.Scene {
   private currentLevelKey: string | null = null; // Store the current level scene key
   private isRestarting: boolean = false; // Reset restart flag
   private overlay!: Phaser.GameObjects.Graphics;
-  private mainContainer!: any; // rexUI Sizer type
   private gameOverTitle!: Phaser.GameObjects.Text;
   private failureText!: Phaser.GameObjects.Text;
   private pressEnterText!: Phaser.GameObjects.Text;
@@ -52,48 +51,22 @@ export class GameOverUIScene extends Phaser.Scene {
   }
 
   private createUI(): void {
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-
-    // Create vertical layout container using rexUI
-    this.mainContainer = this.rexUI.add.sizer({
-      x: screenWidth / 2,
-      y: screenHeight / 2,
-      width: screenWidth,
-      height: screenHeight,
-      orientation: 'vertical',
-      space: { 
-        top: 150,           // Top padding
-        bottom: 150,        // Bottom padding
-        left: 20,          // Left padding
-        right: 20          // Right padding
-      }
-    });
-
     // Create game over title
     this.createGameOverTitle();
-
-    // Create flexible space in the middle
-    this.mainContainer.addSpace();
 
     // Create failure text
     this.createFailureText();
 
-    // Add some space
-    this.mainContainer.addSpace();
-
     // Create PRESS ENTER text
     this.createPressEnterText();
-
-    // Layout UI
-    this.mainContainer.layout();
   }
 
   private createGameOverTitle(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
-    // Create game over title text
-    this.gameOverTitle = this.add.text(0, 0, 'GAME OVER', {
+    // Create game over title text positioned at upper third of screen
+    this.gameOverTitle = this.add.text(screenWidth / 2, screenHeight * 0.3, 'GAME OVER', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 12, 80) + 'px',
       color: '#FF0000', // Red color
@@ -101,12 +74,6 @@ export class GameOverUIScene extends Phaser.Scene {
       strokeThickness: 8,
       align: 'center'
     }).setOrigin(0.5, 0.5);
-
-    // Add to main container
-    this.mainContainer.add(this.gameOverTitle, {
-        proportion: 0, 
-        align: 'center',
-    });
 
     // Add blinking animation for title (faster frequency to create urgency)
     this.tweens.add({
@@ -121,9 +88,10 @@ export class GameOverUIScene extends Phaser.Scene {
 
   private createFailureText(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
-    // Create failure text
-    this.failureText = this.add.text(0, 0, 'Your gundam has been destroyed!', {
+    // Create failure text positioned at center of screen
+    this.failureText = this.add.text(screenWidth / 2, screenHeight * 0.5, 'Your gundam has been destroyed!', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 25, 36) + 'px',
       color: '#FFFFFF',
@@ -131,21 +99,16 @@ export class GameOverUIScene extends Phaser.Scene {
       strokeThickness: 4,
       align: 'center'
     }).setOrigin(0.5, 0.5);
-
-    // Add to main container
-    this.mainContainer.add(this.failureText, {
-        proportion: 0, 
-        align: 'center',
-    });
   }
 
   private createPressEnterText(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
     console.log('use font RetroPixel');
     
-    // Create PRESS ENTER text
-    this.pressEnterText = this.add.text(0, 0, 'PRESS ENTER TO RESTART', {
+    // Create PRESS ENTER text positioned at lower third of screen
+    this.pressEnterText = this.add.text(screenWidth / 2, screenHeight * 0.7, 'PRESS ENTER TO RESTART', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 25, 36) + 'px',
       color: '#FFFF00', // Yellow color
@@ -153,12 +116,6 @@ export class GameOverUIScene extends Phaser.Scene {
       strokeThickness: 6,
       align: 'center'
     }).setOrigin(0.5, 0.5);
-
-    // Add to main container
-    this.mainContainer.add(this.pressEnterText, { 
-      proportion: 0, 
-      align: 'center',
-    });
 
     // Add blinking animation
     this.tweens.add({

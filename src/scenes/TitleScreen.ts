@@ -10,12 +10,12 @@ export class TitleScreen extends Phaser.Scene {
   private enterKey!: Phaser.Input.Keyboard.Key;
   private spaceKey!: Phaser.Input.Keyboard.Key;
   private backgroundMusic!: Phaser.Sound.BaseSound;
-  private mainContainer!: any; // rexUI Sizer type
 
   constructor() {
     super({
       key: "TitleScreen",
     });
+    this.isStarting = false; // Initialize starting flag
   }
 
   init(): void {
@@ -54,43 +54,16 @@ export class TitleScreen extends Phaser.Scene {
   }
 
   private createUI(): void {
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-
-    // Create vertical layout container using rexUI
-    this.mainContainer = this.rexUI.add.sizer({
-      x: screenWidth / 2,
-      y: screenHeight / 2,
-      width: screenWidth,
-      height: screenHeight,
-      orientation: 'vertical',
-      space: { 
-        top: 50,            // Top padding
-        bottom: 80,         // Bottom padding
-        left: 20,           // Left padding
-        right: 20           // Right padding
-      }
-    });
-
-    // Create game title
+    // Use native Phaser elements for layout
     this.createGameTitle();
-
-    // Create flexible space in the middle
-    this.mainContainer.addSpace();
-
-    // Create PRESS ENTER text
     this.createPressEnterText();
-
-    // Layout UI
-    this.mainContainer.layout();
   }
 
   private createGameTitle(): void {
     const screenWidth = screenSize.width.value;
     const screenHeight = screenSize.height.value;
     
-    // Create game title image
-    this.gameTitle = this.add.image(0, 0, "game_title");
+    this.gameTitle = this.add.image(screenWidth / 2, screenHeight * 0.35, "game_title");
     
     const maxTitleWidth = screenWidth * 0.7;
     const maxTitleHeight = screenHeight * 0.6;
@@ -100,19 +73,16 @@ export class TitleScreen extends Phaser.Scene {
     } else {
         this.gameTitle.setScale(maxTitleHeight / this.gameTitle.height);
     }
-
-    // Add to main container
-    this.mainContainer.add(this.gameTitle, {
-        proportion: 0, 
-        align: 'center',
-    });
+    // Ensure top distance is 50px
+    this.gameTitle.y = 50 + this.gameTitle.displayHeight / 2;
   }
 
   private createPressEnterText(): void {
     const screenWidth = screenSize.width.value;
+    const screenHeight = screenSize.height.value;
     
-    // Create PRESS ENTER text
-    this.pressEnterText = this.add.text(0, 0, 'PRESS ENTER', {
+    // Create PRESS ENTER text (centered at bottom)
+    this.pressEnterText = this.add.text(screenWidth / 2, screenSize.height.value * 0.75, 'PRESS ENTER', {
       fontFamily: 'RetroPixel, monospace',
       fontSize: Math.min(screenWidth / 20, 48) + 'px',
       color: '#ffffff',
@@ -121,11 +91,8 @@ export class TitleScreen extends Phaser.Scene {
       align: 'center'
     }).setOrigin(0.5, 0.5);
 
-    // Add to main container
-    this.mainContainer.add(this.pressEnterText, { 
-      proportion: 0, 
-      align: 'center',
-    });
+    // Ensure bottom distance is 80px
+    this.pressEnterText.y = screenHeight - 80 - this.pressEnterText.displayHeight / 2;
 
     // Add blinking animation
     this.tweens.add({
