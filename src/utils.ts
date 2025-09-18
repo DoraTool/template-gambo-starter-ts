@@ -24,38 +24,41 @@ export const createTrigger = (
 
 
 /**
- * 所有输入角度均为“度（°）”，并且**按顺时针方向**测量。
- * 基准约定：
- *   - 0° = 屏幕竖直向上（up）
- *   - 顺时针增加：右 = 90°，下 = 180°，左 = 270°。
+ * All input angles are in **degrees (°)** and measured **clockwise**.
+ * Reference system:
+ *   - 0° = screen space vertical up
+ *   - Clockwise: right = 90°, down = 180°, left = 270°.
  *
- * 用途：
- *   计算素材（sprite）需要旋转的弧度，使其始终沿飞行方向指向目标。
+ * Purpose:
+ *   Compute the rotation (in radians) needed for a sprite so that it always
+ *   points in the desired flight direction.
  *
  * @param {number} assetDirectionAngle
- *   - 素材自身的默认朝向角度（顺时针，度）
- *   - 指 sprite 在 rotation = 0 时，图片自身箭头指向与 0°(up) 的夹角
- *   - 例：如果箭头素材在美术图里默认朝右上，则此值 = 45
+ *   - The default facing angle of the asset (clockwise, degrees).
+ *   - Defined as the angle between the sprite’s arrow direction (when rotation = 0)
+ *     and the 0° (up) direction.
+ *   - Example: if the arrow image points to the upper-right by default, use 45.
  *
  * @param {number} targetAngle
- *   - 期望的飞行方向角度（顺时针，度）
- *   - 与 0°(up) 的夹角
- *   - 通常由 Phaser.Math.Angle.Between 计算目标点方向，再换算成此坐标系
+ *   - The intended flight direction angle (clockwise, degrees).
+ *   - Defined as the angle between the flight direction and 0° (up).
+ *   - Typically obtained using Phaser.Math.Angle.Between, then converted
+ *     to this clockwise coordinate system.
  *
  * @returns {number}
- *   - 最终旋转角度（弧度）
- *   - 可直接赋给 sprite.rotation
+ *   - The final rotation angle in radians.
+ *   - Can be assigned directly to `sprite.rotation`.
  *
- * 使用示例：
- *   // 例1：素材箭头默认朝向右上（45°），目标方向 = 竖直向上（0°）
+ * Usage examples:
+ *   // Example 1: asset arrow points upper-right (45°), flight direction = up (0°)
  *   this.sprite.rotation = computeRotationCW(45, 0);
- *   // => 返回 -45°(弧度)，让箭头从右上旋转到正上
+ *   // => returns -45° in radians, rotates the arrow from upper-right to up
  *
- *   // 例2：素材箭头默认朝向右（90°），目标方向 = 右（90°）
+ *   // Example 2: asset arrow points right (90°), flight direction = right (90°)
  *   this.sprite.rotation = computeRotationCW(90, 90);
- *   // => 返回 0 (弧度)，不需要旋转
+ *   // => returns 0 radians, no rotation needed
  */
 export function computeRotationCW(assetDirectionAngle: number, targetAngle: number) {
-  // 两者都在同一顺时针坐标系下，直接相减即可
+  // Both angles are in the same clockwise coordinate system, so just subtract
   return Phaser.Math.DegToRad(targetAngle - assetDirectionAngle);
 }
