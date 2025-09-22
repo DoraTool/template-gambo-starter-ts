@@ -17,10 +17,20 @@
   },
   "tilemaps": {
     "files": [
+      {
+        "type": "tilemapTiledJSON",
+        "key": "mario_level_1",
+        "url": "https://cdn-game-mcp.gambo.ai/ef5225aa-04f9-4230-8590-52218a0c6427/tile_maps/mario_level_1.json"
+      }
     ]
   },
   "tilesets": {
     "files": [
+      {
+        "type": "image",
+        "key": "mario_ground_tileset",
+        "url": "https://cdn-game-mcp.gambo.ai/aeb1959d-77de-47d4-85de-cfb6946d1c91/tilesets/mario_ground_tileset.png"
+      }
     ]
   },
   "backgrounds": {
