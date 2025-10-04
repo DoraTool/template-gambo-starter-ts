@@ -64,6 +64,15 @@
       }
     ]
   },
+  "animation_json": {
+    "files": [
+      {
+        "url": "assets/animations.json",
+        "type": "animation",
+        "key": "animations"
+      }
+    ]
+  },
   "meta": {
     "app": "Gambo AI",
     "version": 1,

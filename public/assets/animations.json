@@ -1,0 +1,22 @@
+{
+  "anims": [
+    {
+      "key": "barbarian_idle_front_anim",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "barbarian_idle_front_frame1",
+          "duration": 800
+        },
+        {
+          "key": "barbarian_idle_front_frame2",
+          "duration": 800
+        }
+      ],
+      "frameRate": 12,
+      "repeat": -1,
+      "originX": 0.5,
+      "originY": 1.0
+    }
+  ]
+}

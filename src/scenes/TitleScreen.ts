@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { screenSize } from '../gameConfig.json';
 import { LevelManager } from '../LevelManager';
+import { initScale } from '../utils';
 
 export class TitleScreen extends Phaser.Scene {
   private isStarting: boolean = false; // Initialize starting flag
@@ -45,12 +46,8 @@ export class TitleScreen extends Phaser.Scene {
     // Create background and scale to fill screen
     this.background = this.add.image(screenWidth / 2, screenHeight / 2, "space_background");
     
-    // Calculate scale ratio to fill screen
-    const scaleX = screenWidth / this.background.width;
-    const scaleY = screenHeight / this.background.height;
-    const scale = Math.max(scaleX, scaleY); // Use larger scale ratio to ensure complete coverage
-
-    this.background.setScale(scale);
+    // Use initScale instead of setScale
+    initScale(this.background, { x: 0.5, y: 0.5 }, screenWidth, screenHeight);
   }
 
   private createUI(): void {
@@ -68,11 +65,9 @@ export class TitleScreen extends Phaser.Scene {
     const maxTitleWidth = screenWidth * 0.7;
     const maxTitleHeight = screenHeight * 0.6;
 
-    if (this.gameTitle.width / this.gameTitle.height > maxTitleWidth / maxTitleHeight) {
-        this.gameTitle.setScale(maxTitleWidth / this.gameTitle.width);
-    } else {
-        this.gameTitle.setScale(maxTitleHeight / this.gameTitle.height);
-    }
+    // Use initScale instead of setScale
+    initScale(this.gameTitle, { x: 0.5, y: 0.5 }, maxTitleWidth, maxTitleHeight);
+    
     // Ensure top distance is 50px
     this.gameTitle.y = 50 + this.gameTitle.displayHeight / 2;
   }
