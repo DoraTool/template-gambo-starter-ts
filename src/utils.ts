@@ -40,15 +40,14 @@ export const resetOriginAndOffset = (sprite: any): void => {
   let baseOriginX = 0.5;
   let baseOriginY = 1.0;
   const currentAnim = sprite.anims.currentAnim;
-  if (currentAnim && animationsData?.anims) {
+  if (currentAnim) {
     // Find animation config by key from loaded JSON
     const animConfig = animationsData.anims.find((anim: any) => anim.key === currentAnim.key);
     if (animConfig) {
       baseOriginX = animConfig.originX || 0.5;
       baseOriginY = animConfig.originY || 1.0;
-      if (currentAnim.key === "gundam_beam_saber_slash_anim" || currentAnim.key === "gundam_idle_anim") {
-        console.log("currentAnim.key", currentAnim.key, "baseOriginX", baseOriginX, "baseOriginY", baseOriginY);
-      }
+    } else {
+      console.error(`Animation config not found for key: ${currentAnim.key}`);
     }
   }
 
