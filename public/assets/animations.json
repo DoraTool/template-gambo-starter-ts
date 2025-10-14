@@ -1,0 +1,21 @@
+{
+  "anims": [
+    {
+      "key": "gundam_idle_anim",
+      "type": "frame",
+      "frames": [
+        {
+          "key": "gundam_idle_frame1",
+          "duration": 800
+        },
+        {
+          "key": "gundam_idle_frame2",
+          "duration": 800
+        }
+      ],
+      "repeat": -1,
+      "originX": 0.5,
+      "originY": 1.0
+    }
+  ]
+}
