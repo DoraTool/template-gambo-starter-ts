@@ -1,4 +1,13 @@
 {
+  "animation_json": {
+    "files": [
+      {
+        "url": "assets/animations.json",
+        "type": "animation",
+        "key": "animations"
+      }
+    ]
+  },
   "fonts": {
     "files": [
       {
@@ -12,6 +21,20 @@
         "type": "font",
         "key": "SupercellMagic",
         "fontType": "opentype"
+      }
+    ]
+  },
+  "gundam_animations": {
+    "files": [
+      {
+        "url": "https://specai-game-assets.s3.us-west-1.amazonaws.com/261/animations/f7ea9b72-5d62-4378-970f-c0eb424b2efa/749a51e2-f609-4f32-beb0-90e07832c35a.png",
+        "type": "image",
+        "key": "gundam_idle_frame1"
+      },
+      {
+        "url": "https://specai-game-assets.s3.us-west-1.amazonaws.com/261/animations/f7ea9b72-5d62-4378-970f-c0eb424b2efa/f82a19a8-80d0-4415-a4fd-16925b32adea.png",
+        "type": "image",
+        "key": "gundam_idle_frame2"
       }
     ]
   },
