@@ -22,6 +22,13 @@ export const createTrigger = (
     return customCollider;
 };
 
+export const initUIDom = (scene: Phaser.Scene, html: string): Phaser.GameObjects.DOMElement => {
+  const dom = scene.add.dom(0, 0, 'div', 'width: 100%; height: 100%').setHTML(html);
+  dom.setOrigin(0, 0);
+  dom.setScrollFactor(0);
+  return dom;
+}
+
 export const resetOriginAndOffset = (sprite: any): void => {
   // If the scene is not active, do not reset the origin and offset
   if (!sprite.scene.sys.isActive()) {
