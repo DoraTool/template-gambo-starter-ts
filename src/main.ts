@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 import { screenSize, debugConfig, renderConfig } from "./gameConfig.json";
 import { Preloader } from "./scenes/Preloader";
 import { TitleScreen } from "./scenes/TitleScreen";
@@ -11,6 +10,11 @@ const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
   width: screenSize.width.value,
   height: screenSize.height.value,
+  backgroundColor: "#000000",
+  parent: 'game-container',
+  dom: {
+    createContainer: true
+  },
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -26,13 +30,6 @@ const config: Phaser.Types.Core.GameConfig = {
     },
   },
   pixelArt: renderConfig.pixelArt.value,
-  plugins: {
-    scene: [{
-      key: 'rexUI',
-      plugin: RexUIPlugin,
-      mapping: 'rexUI'
-    }]
-  },
 };
 
 const game = new Phaser.Game(config);
