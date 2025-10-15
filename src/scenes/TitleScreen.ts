@@ -48,11 +48,6 @@ export class TitleScreen extends Phaser.Scene {
   }
 
   createDOMUI(): void {
-    const screenWidth = this.scale.gameSize.width;
-    const screenHeight = this.scale.gameSize.height;
-    const responsiveFontSize = Math.min(screenWidth / 20, 48);
-    const maxTitleImgWidth = Math.floor(screenWidth * 0.7)
-    const maxTitleImgHeight = Math.floor(screenHeight * 0.6)
     
     // Generate SVG Data URL for clickable container
     let uiHTML = `
@@ -65,13 +60,13 @@ export class TitleScreen extends Phaser.Scene {
             <img id="game-title-image" 
                  src="https://specai-game-assets.s3.us-west-1.amazonaws.com/261/images/game_title.png" 
                  alt="Mobile Suit Gundam" 
-                 class="max-w-[${maxTitleImgWidth}px] max-h-[${maxTitleImgHeight}px] object-contain pointer-events-none"
+                 class="max-h-[460px] mx-20 object-contain pointer-events-none"
                  style="filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.8));" />
           </div>
 
           <!-- Press Enter Text -->
           <div id="press-enter-text" class="text-white font-bold pointer-events-none flex-shrink-0" style="
-            font-size: ${responsiveFontSize}px;
+            font-size: 48px;
             text-shadow: 5px 5px 0px #000000;
             animation: titleBlink 1s ease-in-out infinite alternate;
           ">PRESS ENTER</div>

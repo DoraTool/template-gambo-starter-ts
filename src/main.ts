@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { screenSize, debugConfig, renderConfig } from "./gameConfig.json";
+import "./styles/tailwind.css";
 import { Preloader } from "./scenes/Preloader";
 import { TitleScreen } from "./scenes/TitleScreen";
 import { VictoryUIScene } from "./scenes/VictoryUIScene";
