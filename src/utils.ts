@@ -23,7 +23,8 @@ export const createTrigger = (
 };
 
 export const initUIDom = (scene: Phaser.Scene, html: string): Phaser.GameObjects.DOMElement => {
-  const dom = scene.add.dom(0, 0, 'div', 'width: 100%; height: 100%').setHTML(html);
+  const dom = scene.add.dom(0, 0, 'div', 'width: 100%; height: 100%;').setHTML(html);
+  dom.pointerEvents = 'none';
   dom.setOrigin(0, 0);
   dom.setScrollFactor(0);
   return dom;
