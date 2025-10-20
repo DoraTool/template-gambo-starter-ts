@@ -44,7 +44,9 @@ export const initUIDom = (scene: Phaser.Scene, html: string): Phaser.GameObjects
 
 /**
  * Create a decoration and add it to a group
- * Used to create and set decoration size and position
+ * Used to create and set decoration size and position, each decoration type needs different height settings
+ * but different variants of the same decoration type should have the same height
+ * The height of each decoration is determined by its relative height to a person in reality, where each person is 128px tall
  */
 export const createDecoration = (
   scene: Phaser.Scene,

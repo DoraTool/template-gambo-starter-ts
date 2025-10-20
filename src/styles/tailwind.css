@@ -23,6 +23,20 @@
 @layer components {
   /* CSS Custom Properties for reusable values */
   :root {
+    --pixel-container-progress-fill-clip-path: polygon(
+      calc(100% - 3px) 0px,
+      calc(100% - 3px) 3px,
+      calc(100% - 0px) 3px,
+      calc(100% - 0px) calc(100% - 3px),
+      calc(100% - 3px) calc(100% - 3px),
+      calc(100% - 3px) calc(100% - 0px),
+      3px calc(100% - 0px),
+      3px calc(100% - 3px),
+      0px calc(100% - 3px),
+      0px 3px,
+      3px 3px,
+      3px 0px
+    );
     --pixel-container-clip-path: polygon(
       calc(100% - 9px) 0px,
       calc(100% - 9px) 3px,
