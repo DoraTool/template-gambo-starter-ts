@@ -1,139 +1,142 @@
 import Phaser from 'phaser';
-import { screenSize } from '../gameConfig.json';
-import { LevelManager } from '../LevelManager';
+import { LevelManager } from '../LevelManager.js';
+import * as utils from '../utils';
 
 export class TitleScreen extends Phaser.Scene {
-  private isStarting: boolean = false; // Initialize starting flag
-  private background!: Phaser.GameObjects.Image;
-  private gameTitle!: Phaser.GameObjects.Image;
-  private pressEnterText!: Phaser.GameObjects.Text;
-  private enterKey!: Phaser.Input.Keyboard.Key;
-  private spaceKey!: Phaser.Input.Keyboard.Key;
-  private backgroundMusic!: Phaser.Sound.BaseSound;
+  // UI elements
+  uiContainer!: Phaser.GameObjects.DOMElement;
+  
+  // Input controls - HTML event handlers
+  keydownHandler?: (event: KeyboardEvent) => void;
+  clickHandler?: (event: Event) => void;
+  
+  // Audio
+  backgroundMusic!: Phaser.Sound.BaseSound;
+  
+  // State flags
+  isStarting: boolean = false;
 
   constructor() {
     super({
       key: "TitleScreen",
     });
-    this.isStarting = false; // Initialize starting flag
+    this.isStarting = false;
   }
 
   init(): void {
-    // Reset starting flag
+    // Reset start flag
     this.isStarting = false;
   }
 
   create(): void {
-    // Create background
-    this.createBackground();
+    // Initialize sounds first
+    this.initializeSounds();
+    
+    // Create DOM UI (includes background)
+    this.createDOMUI();
 
-    // Create UI directly, fonts are already loaded through Phaser loader
-    this.createUI();
-
-    // Setup input controls
+    // Set up input controls
     this.setupInputs();
 
     // Play background music
     this.playBackgroundMusic();
-  }
-
-  private createBackground(): void {
-    // Get screen dimensions
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-
-    // Create background and scale to fill screen
-    this.background = this.add.image(screenWidth / 2, screenHeight / 2, "space_background");
     
-    // Calculate scale ratio to fill screen
-    const scaleX = screenWidth / this.background.width;
-    const scaleY = screenHeight / this.background.height;
-    const scale = Math.max(scaleX, scaleY); // Use larger scale ratio to ensure complete coverage
-
-    this.background.setScale(scale);
-  }
-
-  private createUI(): void {
-    // Use native Phaser elements for layout
-    this.createGameTitle();
-    this.createPressEnterText();
-  }
-
-  private createGameTitle(): void {
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-    
-    this.gameTitle = this.add.image(screenWidth / 2, screenHeight * 0.35, "game_title");
-    
-    const maxTitleWidth = screenWidth * 0.7;
-    const maxTitleHeight = screenHeight * 0.6;
-
-    if (this.gameTitle.width / this.gameTitle.height > maxTitleWidth / maxTitleHeight) {
-        this.gameTitle.setScale(maxTitleWidth / this.gameTitle.width);
-    } else {
-        this.gameTitle.setScale(maxTitleHeight / this.gameTitle.height);
-    }
-    // Ensure top distance is 50px
-    this.gameTitle.y = 50 + this.gameTitle.displayHeight / 2;
-  }
-
-  private createPressEnterText(): void {
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-    
-    // Create PRESS ENTER text (centered at bottom)
-    this.pressEnterText = this.add.text(screenWidth / 2, screenSize.height.value * 0.75, 'PRESS ENTER', {
-      fontFamily: 'RetroPixel, monospace',
-      fontSize: Math.min(screenWidth / 20, 48) + 'px',
-      color: '#ffffff',
-      stroke: '#000000',
-      strokeThickness: 10,
-      align: 'center'
-    }).setOrigin(0.5, 0.5);
-
-    // Ensure bottom distance is 80px
-    this.pressEnterText.y = screenHeight - 80 - this.pressEnterText.displayHeight / 2;
-
-    // Add blinking animation
-    this.tweens.add({
-      targets: this.pressEnterText,
-      alpha: 0.3,
-      duration: 1000,
-      ease: 'Sine.easeInOut',
-      yoyo: true,
-      repeat: -1
+    // Listen for scene shutdown to cleanup event listeners
+    this.events.once('shutdown', () => {
+      this.cleanupEventListeners();
     });
   }
 
-  private setupInputs(): void {
-    // Clean up any existing event listeners
-    this.input.off('pointerdown');
+  createDOMUI(): void {
     
-    // Create keyboard input
-    this.enterKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-    this.spaceKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    // Generate SVG Data URL for clickable container
+    let uiHTML = `
+      <div id="title-screen-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[1000] font-retro flex flex-col justify-between items-center" style="image-rendering: pixelated; background-image: url('https://specai-game-assets.s3.us-west-1.amazonaws.com/261/images/f1d2ae3c-cc48-4c40-b05c-4a141394a145.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <!-- Main Content Container -->
+        <div class="flex flex-col items-center space-y-10 justify-between pt-12 pb-20 w-full text-center pointer-events-auto h-full">
+          
+          <!-- Game Title Image Container -->
+          <div id="game-title-container" class="flex-shrink-0 flex items-center justify-center">
+            <img id="game-title-image" 
+                 src="https://specai-game-assets.s3.us-west-1.amazonaws.com/261/images/game_title.png" 
+                 alt="Mobile Suit Gundam" 
+                 class="max-h-[460px] mx-20 object-contain pointer-events-none"
+                 style="filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.8));" />
+          </div>
 
-    // Listen for mouse click events (listen directly on input)
-    this.input.on('pointerdown', () => this.startGame());
+          <!-- Press Enter Text -->
+          <div id="press-enter-text" class="text-white font-bold pointer-events-none flex-shrink-0" style="
+            font-size: 48px;
+            text-shadow: 5px 5px 0px #000000;
+            animation: titleBlink 1s ease-in-out infinite alternate;
+          ">PRESS ENTER</div>
 
-    // Listen for key events
-    this.enterKey.on('down', () => this.startGame());
-    this.spaceKey.on('down', () => this.startGame());
+        </div>
+
+        <!-- Custom Animations and Styles -->
+        <style>
+          @keyframes titleBlink {
+            from { opacity: 0.3; }
+            to { opacity: 1; }
+          }
+        </style>
+      </div>
+    `;
+
+    // Add DOM element to the scene
+    this.uiContainer = utils.initUIDom(this, uiHTML);
   }
 
-  private playBackgroundMusic(): void {
-    // Play background music (lower volume)
+  setupInputs(): void {
+    // Add HTML event listeners for keyboard and mouse events
+    const handleStart = (event: Event) => {
+      event.preventDefault();
+      this.startGame();
+    };
+
+    // Listen for Enter and Space key events on the document
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === 'Enter' || event.code === 'Space') {
+        event.preventDefault();
+        this.startGame();
+      }
+    };
+
+    // Add event listeners
+    document.addEventListener('keydown', handleKeyDown);
+    
+    // Add click event to the UI container
+    if (this.uiContainer && this.uiContainer.node) {
+      this.uiContainer.node.addEventListener('click', handleStart);
+    }
+
+    // Store event listeners for cleanup
+    this.keydownHandler = handleKeyDown;
+    this.clickHandler = handleStart;
+  }
+
+  initializeSounds(): void {
+    // Initialize background music
     this.backgroundMusic = this.sound.add("space_battle_8bit_theme", {
       volume: 0.4,
       loop: true
     });
-    this.backgroundMusic.play();
   }
 
-  private startGame(): void {
+  playBackgroundMusic(): void {
+    // Play the initialized background music
+    if (this.backgroundMusic) {
+      this.backgroundMusic.play();
+    }
+  }
+
+  startGame(): void {
     // Prevent multiple triggers
     if (this.isStarting) return;
     this.isStarting = true;
+
+    // Clean up event listeners
+    this.cleanupEventListeners();
 
     // Stop background music
     if (this.backgroundMusic) {
@@ -152,6 +155,17 @@ export class TitleScreen extends Phaser.Scene {
         console.error("No first level scene found in LEVEL_ORDER");
       }
     });
+  }
+
+  cleanupEventListeners(): void {
+    // Remove HTML event listeners
+    if (this.keydownHandler) {
+      document.removeEventListener('keydown', this.keydownHandler);
+    }
+    
+    if (this.clickHandler && this.uiContainer && this.uiContainer.node) {
+      this.uiContainer.node.removeEventListener('click', this.clickHandler);
+    }
   }
 
   update(): void {
