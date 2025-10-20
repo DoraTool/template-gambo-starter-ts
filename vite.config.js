@@ -8,6 +8,9 @@ export default defineConfig({
     hmr: false,
   },
   plugins: [],
+  css: {
+    postcss: './postcss.config.js',
+  },
   resolve: {
     alias: {
       phaser: "phaser/dist/phaser.js",

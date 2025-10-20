@@ -1,163 +1,133 @@
 import Phaser from 'phaser';
-import { screenSize } from '../gameConfig.json';
-
-interface GameCompleteUISceneData {
-  currentLevelKey?: string;
-}
+import * as utils from '../utils';
 
 export class GameCompleteUIScene extends Phaser.Scene {
-  private currentLevelKey: string | null = null; // Store the current level scene key
-  private isTransitioning: boolean = false; // Reset transition flag
-  private overlay!: Phaser.GameObjects.Graphics;
-  private gameCompleteTitle!: Phaser.GameObjects.Text;
-  private congratulationsText!: Phaser.GameObjects.Text;
-  private pressEnterText!: Phaser.GameObjects.Text;
-  private enterKey!: Phaser.Input.Keyboard.Key;
-  private spaceKey!: Phaser.Input.Keyboard.Key;
+  private currentLevelKey: string | null;
+  private isTransitioning: boolean;
+  private uiContainer: Phaser.GameObjects.DOMElement | null;
+  private enterKey?: Phaser.Input.Keyboard.Key;
+  private spaceKey?: Phaser.Input.Keyboard.Key;
 
   constructor() {
     super({
       key: "GameCompleteUIScene",
     });
+    this.currentLevelKey = null;
+    this.isTransitioning = false;
+    this.uiContainer = null;
   }
 
-  init(data: GameCompleteUISceneData): void {
-    // Receive data passed from the level scene
+  init(data: { currentLevelKey?: string }) {
+    // Receive data from level scene
     this.currentLevelKey = data.currentLevelKey || "Level2Scene";
     // Reset transition flag
     this.isTransitioning = false;
   }
 
   create(): void {
-    // Create semi-transparent overlay background
-    this.createOverlay();
-
-    // Create UI directly, fonts have been loaded through Phaser loader
-    this.createUI();
-
+    // Create DOM UI
+    this.createDOMUI();
     // Setup input controls
     this.setupInputs();
   }
 
-  private createOverlay(): void {
-    // Get screen dimensions
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
+  createDOMUI(): void {
+    const uiHTML = `
+      <div id="game-complete-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-[1000] font-retro flex flex-col justify-center items-center bg-black bg-opacity-70">
+        <!-- Main Content Container -->
+        <div class="flex flex-col items-center justify-center gap-16 p-8 text-center pointer-events-auto">
+          
+          <!-- Game Complete Title -->
+          <div id="game-complete-title" class="text-yellow-400 font-bold pointer-events-none animate-pulse" style="
+            font-size: clamp(48px, 6rem, 72px);
+            text-shadow: 4px 4px 0px #000000;
+            animation: glow 1.2s ease-in-out infinite alternate;
+          ">GAME COMPLETE!</div>
 
-    // Create semi-transparent black overlay
-    this.overlay = this.add.graphics();
-    this.overlay.fillStyle(0x000000, 0.7); // Black, 70% transparency
-    this.overlay.fillRect(0, 0, screenWidth, screenHeight);
+          <!-- Congratulations Text -->
+          <div id="congratulations-text" class="text-white font-bold pointer-events-none" style="
+            font-size: clamp(24px, 3rem, 36px);
+            text-shadow: 2px 2px 0px #000000;
+            line-height: 1.4;
+          ">
+            Congratulations!<br>
+            You have completed all levels!
+          </div>
+
+          <!-- Press Enter Text -->
+          <div id="press-enter-text" class="text-green-400 font-bold pointer-events-none animate-pulse" style="
+            font-size: clamp(20px, 2.5rem, 32px);
+            text-shadow: 3px 3px 0px #000000;
+            animation: blink 0.8s ease-in-out infinite alternate;
+          ">PRESS ENTER TO RETURN TO MENU</div>
+
+        </div>
+
+        <!-- Custom Animations -->
+        <style>
+          @keyframes glow {
+            from { transform: scale(1); }
+            to { transform: scale(1.15); }
+          }
+          
+          @keyframes blink {
+            from { opacity: 0.3; }
+            to { opacity: 1; }
+          }
+          
+          @keyframes rainbow {
+            0% { color: #ff0000; }
+            16% { color: #ff8000; }
+            33% { color: #ffff00; }
+            50% { color: #00ff00; }
+            66% { color: #00ffff; }
+            83% { color: #8000ff; }
+            100% { color: #ff0000; }
+          }
+          
+          #congratulations-text {
+            animation: rainbow 3s linear infinite;
+          }
+          
+          /* Mobile Responsive */
+          @media (max-width: 768px) {
+            #game-complete-container > div {
+              gap: 1.5rem !important;
+              padding: 1.5rem !important;
+            }
+          }
+          
+          @media (max-height: 600px) {
+            #game-complete-container > div {
+              gap: 1rem !important;
+              padding: 1rem !important;
+            }
+          }
+        </style>
+      </div>
+    `;
+
+    // Add DOM element to scene
+    this.uiContainer = utils.initUIDom(this, uiHTML);
   }
 
-  private createUI(): void {
-    // Create game complete title
-    this.createGameCompleteTitle();
-
-    // Create congratulations text
-    this.createCongratulationsText();
-
-    // Create PRESS ENTER text
-    this.createPressEnterText();
-  }
-
-  private createGameCompleteTitle(): void {
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-    
-    // Create game complete title text positioned at upper third of screen
-    this.gameCompleteTitle = this.add.text(screenWidth / 2, screenHeight * 0.25, 'GAME COMPLETE!', {
-      fontFamily: 'RetroPixel, monospace',
-      fontSize: Math.min(screenWidth / 13, 72) + 'px',
-      color: '#FFD700', // Gold color
-      stroke: '#000000',
-      strokeThickness: 8,
-      align: 'center'
-    }).setOrigin(0.5, 0.5);
-
-    // Add blinking animation for title
-    this.tweens.add({
-      targets: this.gameCompleteTitle,
-      scaleX: 1.15,
-      scaleY: 1.15,
-      duration: 1200,
-      ease: 'Sine.easeInOut',
-      yoyo: true,
-      repeat: -1
-    });
-  }
-
-  private createCongratulationsText(): void {
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-    
-    // Create congratulations text positioned at center of screen
-    this.congratulationsText = this.add.text(screenWidth / 2, screenHeight * 0.5, 'Congratulations!\nYou have completed all levels!', {
-      fontFamily: 'RetroPixel, monospace',
-      fontSize: Math.min(screenWidth / 25, 36) + 'px',
-      color: '#FFFFFF',
-      stroke: '#000000',
-      strokeThickness: 4,
-      align: 'center'
-    }).setOrigin(0.5, 0.5);
-
-    // Add rainbow color effect
-    this.tweens.add({
-      targets: this.congratulationsText,
-      duration: 3000,
-      repeat: -1,
-      onUpdate: () => {
-        const hue = (this.time.now * 0.1) % 360;
-        const color = Phaser.Display.Color.HSVToRGB(hue / 360, 1, 1) as Phaser.Types.Display.ColorObject;
-        this.congratulationsText.setColor(`rgb(${Math.floor(color.r)}, ${Math.floor(color.g)}, ${Math.floor(color.b)})`);
-      }
-    });
-  }
-
-  private createPressEnterText(): void {
-    const screenWidth = screenSize.width.value;
-    const screenHeight = screenSize.height.value;
-    
-    console.log('use font RetroPixel');
-    
-    // Create PRESS ENTER text positioned at lower third of screen
-    this.pressEnterText = this.add.text(screenWidth / 2, screenHeight * 0.75, 'PRESS ENTER TO RETURN TO MENU', {
-      fontFamily: 'RetroPixel, monospace',
-      fontSize: Math.min(screenWidth / 28, 32) + 'px',
-      color: '#00FF00', // Green color
-      stroke: '#000000',
-      strokeThickness: 6,
-      align: 'center'
-    }).setOrigin(0.5, 0.5);
-
-    // Add blinking animation
-    this.tweens.add({
-      targets: this.pressEnterText,
-      alpha: 0.3,
-      duration: 800,
-      ease: 'Sine.easeInOut',
-      yoyo: true,
-      repeat: -1
-    });
-  }
-
-  private setupInputs(): void {
-    // Clean up any existing event listeners
+  setupInputs(): void {
+    // Clear previous event listeners
     this.input.off('pointerdown');
     
     // Create keyboard input
-    this.enterKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-    this.spaceKey = this.input.keyboard!.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    this.spaceKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-    // Listen for mouse click events (listen directly on input)
+    // Listen for mouse click events
     this.input.on('pointerdown', () => this.returnToMenu());
 
-    // Listen for key press events
+    // Listen for key events
     this.enterKey.on('down', () => this.returnToMenu());
     this.spaceKey.on('down', () => this.returnToMenu());
   }
 
-  private returnToMenu(): void {
+  returnToMenu(): void {
     // Prevent multiple triggers
     if (this.isTransitioning) return;
     this.isTransitioning = true;
@@ -170,7 +140,7 @@ export class GameCompleteUIScene extends Phaser.Scene {
       currentScene.backgroundMusic.stop();
     }
 
-    // Clean up event listeners
+    // Clear event listeners
     this.input.off('pointerdown');
     if (this.enterKey) {
       this.enterKey.off('down');
@@ -188,6 +158,6 @@ export class GameCompleteUIScene extends Phaser.Scene {
   }
 
   update(): void {
-    // Game complete UI scene doesn't need special update logic
+    // Game Complete UI scene doesn't need special update logic
   }
 }

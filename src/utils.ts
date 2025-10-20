@@ -5,28 +5,113 @@ interface TriggerOrigin {
   y: number;
 }
 
-// Create collision trigger
+interface ZoneWithOwner extends Phaser.GameObjects.Zone {
+  owner?: any;  // Any type of object that can be the owner of the trigger
+}
+
+/**
+ * Create collision trigger - useful for attack area detection, etc.
+ * @param owner - The owner of the trigger (usually the character)
+ */
 export const createTrigger = (
     scene: Phaser.Scene,
+    owner: any,
     x: number,
     y: number,
     width: number,
     height: number,
     origin: TriggerOrigin = { x: 0.5, y: 0.5 }
-): Phaser.GameObjects.Zone => {
-    const customCollider = scene.add.zone(x, y, width, height).setOrigin(origin.x, origin.y);
-
-    scene.physics.add.existing(customCollider);
-    (customCollider.body as Phaser.Physics.Arcade.Body).setAllowGravity(false); // Not affected by gravity
-    (customCollider.body as Phaser.Physics.Arcade.Body).setImmovable(true);
-    return customCollider;
+): ZoneWithOwner => {
+    const zoneWithOwner = scene.add.zone(x, y, width, height).setOrigin(origin.x, origin.y) as ZoneWithOwner;
+    zoneWithOwner.owner = owner;
+    scene.physics.add.existing(zoneWithOwner);
+    (zoneWithOwner.body as Phaser.Physics.Arcade.Body).setAllowGravity(false); // Not affected by gravity
+    (zoneWithOwner.body as Phaser.Physics.Arcade.Body).setImmovable(true);
+    return zoneWithOwner;
 };
 
-export const resetOriginAndOffset = (sprite: any): void => {
-  // If the scene is not active, do not reset the origin and offset
-  if (!sprite.scene.sys.isActive()) {
-    return;
+/**
+ * Initialize UI DOM element for UI scenes
+ * IMPORTANT: Always use this instead of add.dom and createFromHTML
+ */
+export const initUIDom = (scene: Phaser.Scene, html: string): Phaser.GameObjects.DOMElement => {
+  const dom = scene.add.dom(0, 0, 'div', 'width: 100%; height: 100%;').setHTML(html);
+  dom.pointerEvents = 'none';
+  dom.setOrigin(0, 0);
+  dom.setScrollFactor(0);
+  return dom;
+}
+
+/**
+ * Create a decoration and add it to a group
+ * Used to create and set decoration size and position
+ */
+export const createDecoration = (
+  scene: Phaser.Scene,
+  group: Phaser.GameObjects.Group,
+  key: string,
+  x: number,
+  y: number,
+  maxDisplayHeight: number
+): Phaser.GameObjects.Image => {
+  const decoration = scene.add.image(x, y, key);
+  initScale(decoration, { x: 0.5, y: 1.0 }, undefined, maxDisplayHeight);
+  group.add(decoration);
+  return decoration;
+}
+
+/**
+ * Update melee attack trigger position and size based on character facing direction
+ * Supports 4 directions: left, right, up, down
+ * @param attackRange - Attack forward distance (how far the attack reaches)
+ * @param attackWidth - Attack coverage width (perpendicular to attack direction)
+ */
+export const updateMeleeTrigger = (
+  character: any & { 
+    meleeTrigger: ZoneWithOwner; 
+    facingDirection: "left" | "right" | "up" | "down";
+  },
+  attackRange: number,
+  attackWidth: number
+): void => {
+  let triggerX = 0;
+  let triggerY = 0;
+
+  const characterCenterX = character.body.center.x;
+  const characterCenterY = character.body.center.y;
+
+  switch (character.facingDirection) {
+    case "right":
+      triggerX = characterCenterX + attackRange / 2; // Offset to the right of character center
+      triggerY = characterCenterY;
+      (character.meleeTrigger.body as Phaser.Physics.Arcade.Body).setSize(attackRange, attackWidth);
+      break;
+    case "left":
+      triggerX = characterCenterX - attackRange / 2; // Offset to the left of character center
+      triggerY = characterCenterY;
+      (character.meleeTrigger.body as Phaser.Physics.Arcade.Body).setSize(attackRange, attackWidth);
+      break;
+    case "up":
+      triggerX = characterCenterX;
+      triggerY = characterCenterY - attackRange / 2; // Offset above character center
+      (character.meleeTrigger.body as Phaser.Physics.Arcade.Body).setSize(attackWidth, attackRange);
+      break;
+    case "down":
+      triggerX = characterCenterX;
+      triggerY = characterCenterY + attackRange / 2; // Offset below character center
+      (character.meleeTrigger.body as Phaser.Physics.Arcade.Body).setSize(attackWidth, attackRange);
+      break;
   }
+
+  character.meleeTrigger.setPosition(triggerX, triggerY);
+}
+
+/**
+ * Reset origin and offset for sprite after playing animation
+ * IMPORTANT: Must be called every time after playing any animation
+ * Requires all animation info in animations.json and facingDirection property
+ */
+export const resetOriginAndOffset = (sprite: any): void => {
 
   const animationsData = sprite.scene.cache.json.get("animations");
   if (!animationsData) {
@@ -67,15 +152,18 @@ export const resetOriginAndOffset = (sprite: any): void => {
   
   // Calculate offset to align collision box's bottomCenter with animation frame's origin
   const body = sprite.body as Phaser.Physics.Arcade.Body;
-  const unscaledBodyWidth = body.width / sprite.scale
-  const unscaledBodyHeight = body.height / sprite.scale
+  const unscaledBodyWidth = body.sourceWidth
+  const unscaledBodyHeight = body.sourceHeight
   body.setOffset(
     sprite.width * animOriginX - unscaledBodyWidth / 2, 
     sprite.height * animOriginY - unscaledBodyHeight
   );
 }
 
-// All Arcade Sprite constructors must initialize origin, scale, size, offset through this function
+/**
+ * Initialize sprite scale, size, and offset
+ * IMPORTANT: All image assets must use initScale for scaling, DO NOT use setScale or setDisplaySize directly
+ */
 export const initScale = (
     sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Image, 
     origin: { x: number; y: number }, 
@@ -139,8 +227,9 @@ export const initScale = (
 }
 
 /**
- * In some cases, scene.physics.add.collider and scene.physics.add.overlap internally call collideCallback.call(callbackContext, object2, object1), causing parameter order reversal
- * This function ensures that the callback function always receives parameters in the order (object1, object2)
+ * Add collider/overlap with guaranteed parameter order
+ * IMPORTANT: Use these instead of scene.physics.add.collider/overlap to avoid internal bugs
+ * These functions ensure that the callback always receives parameters in the order (object1, object2)
  */
 export const addCollider = (
   scene: Phaser.Scene,
@@ -150,17 +239,16 @@ export const addCollider = (
   processCallback?: Phaser.Types.Physics.Arcade.ArcadePhysicsCallback,
   callbackContext?: any
 ): Phaser.Physics.Arcade.Collider => {
-if (shouldSwap(object1, object2)) {
-  return scene.physics.add.collider(object1, object2, (obj1: any, obj2: any) => {
-    collideCallback?.call(callbackContext, obj2, obj1)
-  }, (obj1: any, obj2: any) => {
-    processCallback?.call(callbackContext, obj2, obj1)
-  }, callbackContext);
-} else {
-  return scene.physics.add.collider(object1, object2, collideCallback, processCallback, callbackContext);
-}
+  if (shouldSwap(object1, object2)) {
+    return scene.physics.add.collider(object1, object2, (obj1: any, obj2: any) => {
+      collideCallback?.call(callbackContext, obj2, obj1)
+    }, (obj1: any, obj2: any) => {
+      processCallback?.call(callbackContext, obj2, obj1)
+    }, callbackContext);
+  } else {
+    return scene.physics.add.collider(object1, object2, collideCallback, processCallback, callbackContext);
+  }
 };
-
 export const addOverlap = (
   scene: Phaser.Scene,
   object1: Phaser.Types.Physics.Arcade.ArcadeColliderType,
@@ -192,4 +280,15 @@ const shouldSwap = (object1: any, object2: any) => {
       (object1IsTilemap && !object2IsPhysicsGroup && !object2IsTilemap) ||
       (object1IsTilemap && object2IsPhysicsGroup)
   );
+}
+
+/**
+ * Must use the following method to correctly calculate sprite rotation in radians (e.g., bullets, arrows, etc.)
+ * Calculate rotation radians based on asset's current direction and target direction, with coordinate origin at top-left of canvas
+ * If currently facing right, direction vector is (1, 0); if currently facing up, direction vector is (0, -1)
+ */
+export function computeRotation(assetDirection: Phaser.Math.Vector2, targetDirection: Phaser.Math.Vector2) {
+  const assetAngle = Math.atan2(assetDirection.y, assetDirection.x);
+  const targetAngle = Math.atan2(targetDirection.y, targetDirection.x); 
+  return targetAngle - assetAngle;
 }
