@@ -69,51 +69,65 @@ export const createDecoration = (
  * @param attackWidth - Attack coverage width (perpendicular to attack direction)
  */
 export const updateMeleeTrigger = (
-  character: any & { 
-    meleeTrigger: ZoneWithOwner; 
-    facingDirection: "left" | "right" | "up" | "down";
-  },
+  character: any,
+  meleeTrigger: ZoneWithOwner,
+  facingDirection: "left" | "right" | "up" | "down",
   attackRange: number,
   attackWidth: number
 ): void => {
+
+  if (facingDirection !== "up" && facingDirection !== "down" && facingDirection !== "left" && facingDirection !== "right") { 
+    throw new Error("updateMeleeTrigger input parameter facingDirection only supports up, down, left, right values");
+  }
+
+  const characterBody = character.body as Phaser.Physics.Arcade.Body;
+  const triggerBody = meleeTrigger.body as Phaser.Physics.Arcade.Body;
+
   let triggerX = 0;
   let triggerY = 0;
 
-  const characterCenterX = character.body.center.x;
-  const characterCenterY = character.body.center.y;
+  const characterCenterX = characterBody.center.x;
+  const characterCenterY = characterBody.center.y;
 
-  switch (character.facingDirection) {
+  switch (facingDirection) {
     case "right":
       triggerX = characterCenterX + attackRange / 2; // Offset to the right of character center
       triggerY = characterCenterY;
-      (character.meleeTrigger.body as Phaser.Physics.Arcade.Body).setSize(attackRange, attackWidth);
+      triggerBody.setSize(attackRange, attackWidth);
       break;
     case "left":
       triggerX = characterCenterX - attackRange / 2; // Offset to the left of character center
       triggerY = characterCenterY;
-      (character.meleeTrigger.body as Phaser.Physics.Arcade.Body).setSize(attackRange, attackWidth);
+      triggerBody.setSize(attackRange, attackWidth);
       break;
     case "up":
       triggerX = characterCenterX;
       triggerY = characterCenterY - attackRange / 2; // Offset above character center
-      (character.meleeTrigger.body as Phaser.Physics.Arcade.Body).setSize(attackWidth, attackRange);
+      triggerBody.setSize(attackWidth, attackRange);
       break;
     case "down":
       triggerX = characterCenterX;
       triggerY = characterCenterY + attackRange / 2; // Offset below character center
-      (character.meleeTrigger.body as Phaser.Physics.Arcade.Body).setSize(attackWidth, attackRange);
+      triggerBody.setSize(attackWidth, attackRange);
       break;
   }
 
-  character.meleeTrigger.setPosition(triggerX, triggerY);
+  meleeTrigger.setPosition(triggerX, triggerY);
 }
 
 /**
  * Reset origin and offset for sprite after playing animation
  * IMPORTANT: Must be called every time after playing any animation
- * Requires all animation info in animations.json and facingDirection property
+ * Requires all animation info in animations.json
  */
-export const resetOriginAndOffset = (sprite: any): void => {
+export const resetOriginAndOffset = (
+  sprite: any, 
+  facingDirection: "left" | "right" | "up" | "down"
+): void => {
+
+  if (facingDirection !== "up" && facingDirection !== "down" && facingDirection !== "left" && facingDirection !== "right") { 
+    throw new Error("resetOriginAndOffset input parameter facingDirection only supports up, down, left, right values");
+  }
 
   const animationsData = sprite.scene.cache.json.get("animations");
   if (!animationsData) {
@@ -138,15 +152,7 @@ export const resetOriginAndOffset = (sprite: any): void => {
     }
   }
 
-  if (!sprite.facingDirection) {
-    throw new Error("resetOriginAndOffset input parameter sprite's facingDirection property cannot be empty");
-  }
-
-  if (sprite.facingDirection !== "up" && sprite.facingDirection !== "down" && sprite.facingDirection !== "left" && sprite.facingDirection !== "right") { 
-    throw new Error("resetOriginAndOffset input parameter sprite's facingDirection property only supports up, down, left, right values");
-  }
-
-  let animOriginX = sprite.facingDirection === "left" ? (1 - baseOriginX) : baseOriginX;
+  let animOriginX = facingDirection === "left" ? (1 - baseOriginX) : baseOriginX;
   let animOriginY = baseOriginY;
   
   // Set origin
