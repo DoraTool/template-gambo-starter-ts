@@ -59,7 +59,7 @@ export class TitleScreen extends Phaser.Scene {
           <div id="game-title-container" class="flex-shrink-0 flex items-center justify-center">
             <img id="game-title-image" 
                  src="https://specai-game-assets.s3.us-west-1.amazonaws.com/261/images/game_title.png" 
-                 alt="Mobile Suit Gundam" 
+                 alt="Game Title" 
                  class="max-h-[460px] mx-20 object-contain pointer-events-none"
                  style="filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.8));" />
           </div>

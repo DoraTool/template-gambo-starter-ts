@@ -49,7 +49,7 @@ export class GameOverUIScene extends Phaser.Scene {
             font-size: clamp(24px, 3rem, 36px);
             text-shadow: 2px 2px 0px #000000;
             line-height: 1.4;
-          ">Your gundam has been destroyed!</div>
+          ">Better luck next time!</div>
 
           <!-- Press Enter Text -->
           <div id="press-enter-text" class="text-yellow-400 font-bold pointer-events-none animate-pulse" style="
