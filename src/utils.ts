@@ -208,8 +208,13 @@ export const initScale = (
   }
 
   sprite.setScale(displayScale)
-  const displayBodyWidth = displayWidth * bodyWidthFactorToDisplayWidth
-  const displayBodyHeight = displayHeight * bodyHeightFactorToDisplayHeight
+
+  // Provide default values for body factor parameters to avoid NaN
+  const widthFactor = bodyWidthFactorToDisplayWidth ?? 1.0;
+  const heightFactor = bodyHeightFactorToDisplayHeight ?? 1.0;
+  
+  const displayBodyWidth = displayWidth * widthFactor
+  const displayBodyHeight = displayHeight * heightFactor
   
   if (sprite.body instanceof Phaser.Physics.Arcade.Body) {
       // Body.setSize requires the unscaled body size as input, because the size of the Dynamic Body will scale with sprite.setScale
